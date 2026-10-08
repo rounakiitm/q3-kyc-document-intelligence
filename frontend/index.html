@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KYC Onboarding — Document Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,550;9..144,650&family=Source+Sans+3:wght@400;550;650;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app.css?v=3"/>
+</head>
+<body>
+<div id="authGate" class="authgate" hidden>
+  <div class="authcard">
+    <div class="authbrand">
+      <div class="logo">✓</div>
+      <h1>KYC Onboarding</h1>
+      <p class="muted">Sign in to classify &amp; extract documents</p>
+    </div>
+    <form id="authForm" class="authform">
+      <label>Email<input id="authEmail" type="email" required autocomplete="username" placeholder="you@company.com"/></label>
+      <label>Password<input id="authPassword" type="password" required autocomplete="current-password" minlength="6" placeholder="••••••••"/></label>
+      <div class="authactions">
+        <button type="submit" id="authSignIn">Sign in</button>
+        <button type="button" id="authSignUp" class="ghost">Create account</button>
+      </div>
+      <p id="authMsg" class="muted"></p>
+    </form>
+  </div>
+</div>
+
+<div class="shell" id="appShell">
+  <aside class="nav">
+    <div class="brand">
+      <div class="logo">✓</div>
+      <div><h1>KYC<br/>Onboarding</h1><p>classify · extract · review</p></div>
+    </div>
+    <nav>
+      <a href="#/run" class="navlink active" data-page="run">1 · Run KYC</a>
+      <a href="#/results" class="navlink" data-page="results">2 · Classification &amp; fields</a>
+      <a href="#/report" class="navlink" data-page="report">3 · Report</a>
+      <a href="#/about" class="navlink" data-page="about">About</a>
+    </nav>
+    <div class="navfoot">
+      <span id="modelBadge" class="badge">…</span>
+      <span class="muted">threshold 0.70 · normalized fields</span>
+      <div class="authuser" id="authUserRow" hidden>
+        <span id="authEmailLabel" class="muted"></span>
+        <button type="button" id="authSignOut" class="ghost sm">Sign out</button>
+      </div>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar">
+      <p id="sessionHint" class="muted">Ready</p>
+      <button type="button" id="authSignOutTop" class="ghost sm" hidden>Sign out</button>
+    </header>
+    <main>
+      <section id="page-run" class="page active">
+        <header class="pagehead">
+          <div>
+            <h2>Run a KYC</h2>
+            <p class="muted">Already-processed files in this session are skipped (content hash). After a run, the selection clears so you only add new docs next time.</p>
+          </div>
+        </header>
+        <div class="cachebar">
+          <span id="cacheHint" class="muted">Session cache: 0 documents</span>
+          <button type="button" id="clearCacheBtn" class="ghost sm">Clear processed cache</button>
+        </div>
+        <div id="dropzone" class="drop">
+          <input type="file" id="fileInput" multiple accept=".png,.jpg,.jpeg,.pdf" hidden/>
+          <div class="dropinner">
+            <div class="big">⇪</div>
+            <h3>Drop the applicant's documents here</h3>
+            <p class="muted">Aadhaar · PAN · DL · Passport · handwritten insurance forms (PNG / JPG / PDF)</p>
+            <button class="btn" type="button" id="browseBtn">Browse files</button>
+          </div>
+        </div>
+        <div id="filelist" class="filelist"></div>
+        <div class="runrow">
+          <button id="runBtn" class="btn primary" disabled type="button">Run KYC</button>
+          <button id="sampleBtn" class="btn ghost2" type="button">Load the 10 sample documents</button>
+        </div>
+        <div id="progressWrap" class="progresswrap" hidden>
+          <div class="progresstrack"><div id="progressBar" class="progressbar"></div></div>
+          <p id="progressText" class="muted"></p>
+        </div>
+      </section>
+
+      <section id="page-results" class="page">
+        <header class="pagehead">
+          <div>
+            <h2>Classification &amp; extraction</h2>
+            <p class="muted">Document types first, then normalized field tables per document.</p>
+          </div>
+        </header>
+        <div id="resultCards"></div>
+      </section>
+
+      <section id="page-report" class="page">
+        <header class="pagehead">
+          <div>
+            <h2>KYC report</h2>
+            <p class="muted">Checklist, flags, and downloadable JSON.</p>
+          </div>
+          <button id="dlBtn" class="ghost" type="button">Download kyc_run.json</button>
+        </header>
+        <div id="reportBody"></div>
+      </section>
+
+      <section id="page-about" class="page">
+        <header class="pagehead"><h2>About</h2></header>
+        <div class="about">
+          <p><b>KYC Document Intelligence</b> classifies each upload against the 10 assessment schemas,
+          extracts required fields with per-field confidence, normalizes values (dates, PAN, Aadhaar, IFSC…),
+          and flags anything below 0.70 for human review.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+<script src="config.js"></script>
+<script src="app.js?v=8"></script>
+</body>
+</html>
